@@ -12,13 +12,27 @@ const Display = (props) => {
         <p>{props.text} {props.value} %</p>
       )
   }
-  return (  
+  return ( 
       <p>{props.text} {props.value}</p>
   )
 }
 
-function App() {
+const Statistics = ({stats, allClicks}) => {
 
+  if (allClicks === 0) {
+    return <p>No feedback given</p>
+  }
+
+  return (
+    <>
+      {stats.map((sta) => (
+        <Display key={sta.text} text={sta.text} value={sta.value} />
+      ))}
+    </>
+  )
+}
+
+function App() {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
@@ -27,17 +41,30 @@ function App() {
   const [average, setAverage] = useState(0)
   const [positive, setPositive] = useState(0)
 
+  const grades = [
+    {text: "good", value: good},
+    {text: "neutral", value: neutral},
+    {text: "bad", value: bad},
+    {text: "all", value: allClicks},
+    {text: "average", value: average},
+    {text: "positive", value: positive}
+  ]
+
+  const [stats, setStatistic] = useState(grades)
+
   const setGoodGrade = () => {
     const numberOfClicks = allClicks + 1
     setAll(numberOfClicks)
 
     const updateTotal = total + 1
     setTotal(updateTotal)
-
     setAverage(updateTotal / numberOfClicks )
+
     const updateGood = good + 1
     setGood(updateGood)
+
     setPositive((updateGood / numberOfClicks) * 100)
+    setStatistic(stats.concat({good: updateGood, average:(updateTotal / numberOfClicks), positive: (updateGood / numberOfClicks) * 100}))
   }
 
   const setBadGrade = () => {
@@ -46,11 +73,13 @@ function App() {
 
     const updateTotal = total - 1
     setTotal(updateTotal)
-
     setAverage(updateTotal / numberOfClicks )
+
     const updateBad = bad + 1
     setBad(updateBad)
+
     setPositive((good / numberOfClicks) * 100)
+    setStatistic(stats.concat({bad: updateBad, average: (updateTotal / numberOfClicks), positive: (good / numberOfClicks) * 100}))
   }
 
   const setNeutralGrade = () => {
@@ -58,9 +87,12 @@ function App() {
     setAll(numberOfClicks)
 
     setAverage(total / numberOfClicks )
+
     const updateNeutral = neutral + 1
     setNeutral(updateNeutral)
+    
     setPositive((good / numberOfClicks) * 100)
+    setStatistic(stats.concat({neutral: updateNeutral, average: (total / numberOfClicks), positive: (good / numberOfClicks) * 100}))
   }
 
   return (
@@ -70,12 +102,7 @@ function App() {
       <Button onClick={setNeutralGrade} text="neutral" />
       <Button onClick={setBadGrade} text="bad" />
       <h2>Statistics</h2>
-      <Display value={good} text="good"/>
-      <Display value={neutral} text="neutral" />
-      <Display value={bad} text="bad" />
-      <Display value={allClicks} text="all" />
-      <Display value={average} text="average" />
-      <Display value={positive} text="positive" />
+      <Statistics stats={grades} allClicks={allClicks} />
     </>
   )
 }
