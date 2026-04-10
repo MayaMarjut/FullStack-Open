@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './App.css'
 
 const Button = (props) => (
   <button onClick={props.onClick}>
@@ -6,14 +7,22 @@ const Button = (props) => (
   </button>
 )
 
-const Display = (props) => {
+const Header = (props) => <h1>{props.text}</h1>
+
+const StatisticLine = (props) => {
   if (props.text === "positive") {
       return (
-        <p>{props.text} {props.value} %</p>
+        <tr>
+          <th>{props.text}</th>
+          <td>{props.value} %</td>
+        </tr>
       )
   }
   return ( 
-      <p>{props.text} {props.value}</p>
+    <tr>
+      <th>{props.text}</th>
+      <td>{props.value}</td>
+    </tr>
   )
 }
 
@@ -24,11 +33,14 @@ const Statistics = ({stats, allClicks}) => {
   }
 
   return (
-    <>
+    <table>
+      <caption>Statistics</caption>
+      <tbody>
       {stats.map((sta) => (
-        <Display key={sta.text} text={sta.text} value={sta.value} />
+        <StatisticLine key={sta.text} text={sta.text} value={sta.value} />
       ))}
-    </>
+      </tbody>
+    </table>
   )
 }
 
@@ -97,11 +109,10 @@ function App() {
 
   return (
     <>
-      <h1>Give feedback</h1>
+      <Header text="Give feedback" />
       <Button onClick={setGoodGrade} text="good" />
       <Button onClick={setNeutralGrade} text="neutral" />
       <Button onClick={setBadGrade} text="bad" />
-      <h2>Statistics</h2>
       <Statistics stats={grades} allClicks={allClicks} />
     </>
   )

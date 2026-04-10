@@ -1,0 +1,14 @@
+table {
+    margin-top: 2rem;
+}
+
+caption {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+th {
+    text-align: left;
+
+}
