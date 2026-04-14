@@ -1,4 +1,9 @@
+// Consists exercises phonebook 2.6 to 2.10
+
 import { useState } from 'react'
+import Contacts from './components/Contacts'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -14,7 +19,7 @@ const App = () => {
   const addNewContact = (event) => {
     event.preventDefault()
 
-    const nameMatches = persons.some(person => person.name === newName)
+    const nameMatches = persons.some(person => person.name.toLowerCase() === newName.toLowerCase())
     if (nameMatches) {
       alert(`${newName} is already added to phonebook`)
       return
@@ -47,22 +52,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with<input value={newFilter} onChange={handleFilter}/></div>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleAddPerson} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleAddNumber} />
-        </div>
-        <div>
-          <button type="submit" onClick={addNewContact}>add</button>
-        </div>
-      </form>
+      <Filter filter={newFilter} addFilter={handleFilter} />
+      <PersonForm 
+        name={newName} 
+        number={newNumber} 
+        addNumber={handleAddNumber} 
+        addPerson={handleAddPerson} 
+        addContact={addNewContact} /> 
       <h2>Numbers</h2>
-      {contactsToShow.map(person => 
-        <p key={person.name}>{person.name} {person.number}</p>
-      )}
+      <Contacts persons={contactsToShow} />
     </div>
   )
 
