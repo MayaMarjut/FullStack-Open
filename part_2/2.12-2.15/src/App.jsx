@@ -22,12 +22,32 @@ const App = () => {
 
   const addNewContact = (event) => {
     event.preventDefault()
-
+    
     const nameMatches = persons.some(person => person.name.toLowerCase() === newName.toLowerCase())
-    if (nameMatches) {
+    if (nameMatches && !newNumber) {
       alert(`${newName} is already added to phonebook`)
       return
     }
+    
+    if (nameMatches && newNumber) {
+      const contact = persons.find(personToUpdate => personToUpdate.name === newName)
+      const updatedContact = { ...contact, number: newNumber }
+
+      if (window.confirm(`${contact.name} is already added to phonebook, replace the old number with a new one?`)) {
+          contactService
+          .updateContact(contact.id, updatedContact)
+          .then(returnedContact => {
+            setPersons(persons.map(person => person.id !== contact.id ? person : returnedContact))
+          })
+          .catch(error => {
+            alert(
+              `'${contact.name}' number could not be changed`
+            )
+            setPersons(persons.filter(person => person.id !== contact.id))
+          })
+      }
+      return
+    }       
 
     const newContact = {
       name: newName,
@@ -37,7 +57,6 @@ const App = () => {
     contactService
       .addContact(newContact)
       .then(returnedContact => {
-        console.log('paluuarvo', returnedContact)
         setPersons(persons.concat(returnedContact))
         setNewName('')
         setNewNumber('')
@@ -61,7 +80,6 @@ const App = () => {
       contactService
         .deleteContact(id)
         .then(returnedContact => {
-          console.log('deletoitava tyyppi', id, returnedContact)
           setPersons(persons.filter(person => person.id !== id))
     })
   }

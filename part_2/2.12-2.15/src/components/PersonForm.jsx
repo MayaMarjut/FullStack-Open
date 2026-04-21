@@ -3,6 +3,7 @@ const PersonForm = ({name, number, addNumber, addPerson, addContact}) => {
 
         return (
         <form>
+            <h2>Add a new</h2>
             <div>
             name: <input value={name} onChange={addPerson} />
             </div>
