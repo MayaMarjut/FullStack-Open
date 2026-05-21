@@ -1,4 +1,4 @@
- // Exercise 3.9 - 3.11 Phonebook step9 to step10
+ // Exercise 3.9 - 3.11 Phonebook step9 to step11
 
 const express = require('express')
 const morgan = require('morgan')

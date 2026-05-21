@@ -1,4 +1,4 @@
-// Consists exercises phonebook 2.16- 2.17 step11 - step12
+// Consists exercises 3.9 - 3.11 Phonebook step9 to step11
 
 import { useState, useEffect } from 'react'
 import Contacts from './components/Contacts'
