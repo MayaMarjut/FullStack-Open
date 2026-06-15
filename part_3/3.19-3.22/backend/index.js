@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('./instrument.js')
-const Sentry = require('@sentry/node');
+const Sentry = require('@sentry/node')
 const express = require('express')
 const Person = require('./models/person')
 const morgan = require('morgan')
@@ -33,7 +33,7 @@ app.get('/api/persons/:id', (req, res, next) => {
       res.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -46,16 +46,16 @@ app.get('/info', (request, response) => {
 
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
-  
+
   const person = new Person({
     name: body.name,
     number: body.number
   })
-  
+
   person.save().then(savedPerson => {
     res.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -87,9 +87,9 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 
 
-Sentry.setupExpressErrorHandler(app);
+Sentry.setupExpressErrorHandler(app)
 
-app.use(function onError(err, req, res, next) {
+app.use(function onError(err, req, res) {
   let statusCode = err.status || 500
 
   if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -100,7 +100,7 @@ app.use(function onError(err, req, res, next) {
     error: err.message,
     sentryId: res.sentry
   })
-});
+})
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
